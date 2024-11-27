@@ -1,4 +1,4 @@
-def imageName="lzabinsk/panda-front"
+def imageName= "lzabinsk/panda-front"
 def dockerRegistry=""
 def registryCredentials="dockerhub"
 
@@ -52,6 +52,9 @@ pipeline {
     }
     
     post {
+        success {
+            build wait: false, job: 'app_of_apps', parameters: [string(name: 'backendDockerTag', value: "latest"), string(name: 'frontendDockerTag', value: "$dockerTag")]
+        }
         always {
             junit testResults: "test-results/*.xml"
             cleanWs()
